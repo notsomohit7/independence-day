@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Tiranga Challenge - Independence Day</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Teko:wght@700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .font-teko {
+            font-family: 'Teko', sans-serif;
+        }
+
+        .flag-wave {
+            animation: wave 3s infinite ease-in-out;
+            transform-origin: left center;
+        }
+
+        @keyframes wave {
+            0% { transform: skewX(0deg) skewY(0deg); }
+            25% { transform: skewX(-5deg) skewY(2deg); }
+            50% { transform: skewX(5deg) skewY(-2deg); }
+            75% { transform: skewX(-2deg) skewY(-1deg); }
+            100% { transform: skewX(0deg) skewY(0deg); }
+        }
+        
+        .animate-spin-slow {
+            animation: spin 20s linear infinite;
+        }
+
+        .quote {
+            animation: fadeIn 4s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .active-nav-link {
+            color: #3b82f6; /* blue-500 */
+            font-weight: 600;
+        }
+
+        #fireworks-container {
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            animation: firework-trail 1.5s ease-out forwards;
+        }
+
+        @keyframes firework-trail {
+            0% {
+                transform: scale(0.5) translate(0, 0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.8) translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-orange-50 via-white to-green-50 text-gray-800">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+            <h1 class="text-3xl font-teko text-orange-500">CODE TIRANGA</h1>
+            
+            <div class="hidden md:flex items-center gap-4">
+                <ul id="nav-links-desktop" class="flex space-x-6 items-center">
+                    <li><a href="#home" class="text-gray-600 hover:text-blue-500 transition duration-300 px-2 py-1"><i class="fas fa-home mr-1"></i>Home</a></li>
+                    <li><a href="#quote" class="text-gray-600 hover:text-blue-500 transition duration-300 px-2 py-1"><i class="fas fa-quote-left mr-1"></i>Quote</a></li>
+                    <li><a href="#timeline" class="text-gray-600 hover:text-blue-500 transition duration-300 px-2 py-1"><i class="fas fa-stream mr-1"></i>Timeline</a></li>
+                    <li><a href="#pledge" class="text-gray-600 hover:text-blue-500 transition duration-300 px-2 py-1"><i class="fas fa-flag mr-1"></i>Pledge</a></li>
+                </ul>
+                <button id="anthem-btn-desktop" title="Play National Anthem" class="text-gray-600 hover:text-blue-500 transition duration-300 px-4 py-2 rounded-full bg-gray-200/50 hover:bg-gray-200 font-semibold flex items-center">
+                    <i class="fas fa-play"></i><span class="hidden lg:inline ml-2">Play National Anthem</span>
+                </button>
+            </div>
+
+            <button id="mobile-menu-btn" class="md:hidden text-2xl text-gray-700">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+
+        <div id="mobile-menu" class="hidden md:hidden">
+            <ul id="nav-links-mobile" class="flex flex-col items-center p-4 space-y-4 border-t border-gray-200">
+                <li><a href="#home" class="text-gray-600 hover:text-blue-500 transition duration-300">Home</a></li>
+                <li><a href="#quote" class="text-gray-600 hover:text-blue-500 transition duration-300">Quote</a></li>
+                <li><a href="#timeline" class="text-gray-600 hover:text-blue-500 transition duration-300">Timeline</a></li>
+                <li><a href="#pledge" class="text-gray-600 hover:text-blue-500 transition duration-300">Pledge</a></li>
+                <li>
+                    <button id="anthem-btn-mobile" title="Play National Anthem" class="text-gray-600 hover:text-blue-500 transition duration-300 px-4 py-2 rounded-full bg-gray-200/50 hover:bg-gray-200 font-semibold flex items-center justify-center">
+                        <i class="fas fa-play mr-2"></i>Play Anthem
+                    </button>
+                </li>
+            </ul>
+        </div>
+        
+        <div id="anthem-player" class="flex md:hidden bg-gray-800/80 backdrop-blur-sm text-white p-2 w-full z-50">
+            <div class="container mx-auto flex items-center justify-between px-4 sm:px-6">
+                <div class="flex items-center gap-3 overflow-hidden whitespace-nowrap">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Ashoka_Chakra.svg/240px-Ashoka_Chakra.svg.png" alt="Ashoka Chakra" class="h-8 animate-spin-slow">
+                    <div>
+                        <h4 class="font-semibold text-sm">National Anthem</h4>
+                        <p class="text-xs text-gray-400">Jana Gana Mana</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <button id="player-play-pause-btn" title="Play/Pause" class="text-white hover:text-gray-300 text-lg">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="player-stop-btn" title="Stop" class="text-white hover:text-gray-300 text-lg">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                    <button id="close-player-btn" title="Close" class="text-gray-400 hover:text-white text-xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="fireworks-container" class="container mx-auto px-4 sm:px-6 py-12 text-center">
+        
+        <section id="home" class="min-h-[80vh] flex flex-col items-center justify-center pt-16 pb-8 scroll-mt-20">
+            <h2 class="text-4xl sm:text-5xl md:text-7xl font-teko mb-6 text-gray-800">Happy Independence Day!</h2>
+            
+            <div class="flex justify-center mb-8">
+                <div class="flag-wave w-[240px] h-[160px] sm:w-[300px] sm:h-[200px] shadow-lg flex flex-col">
+                    <div class="h-1/3 bg-orange-500"></div>
+                    <div class="h-1/3 bg-white flex items-center justify-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Ashoka_Chakra.svg/240px-Ashoka_Chakra.svg.png" alt="Ashoka Chakra" class="h-10 sm:h-12 animate-spin-slow" onerror="this.style.display='none'">
+                    </div>
+                    <div class="h-1/3 bg-green-600"></div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-xl sm:text-2xl font-teko text-gray-700">Challenge Ends In:</h3>
+                <div id="countdown" class="flex justify-center space-x-2 sm:space-x-4 text-2xl md:text-4xl font-semibold mt-2 text-gray-900">
+                    <div><span id="days">00</span><span class="block text-xs sm:text-sm font-normal">Days</span></div>
+                    <div><span id="hours">00</span><span class="block text-xs sm:text-sm font-normal">Hours</span></div>
+                    <div><span id="minutes">00</span><span class="block text-xs sm:text-sm font-normal">Minutes</span></div>
+                    <div><span id="seconds">00</span><span class="block text-xs sm:text-sm font-normal">Seconds</span></div>
+                </div>
+            </div>
+            
+            <p class="text-base sm:text-lg mt-8 text-gray-600">Click anywhere for a celebratory surprise! ✨</p>
+        </section>
+
+        <hr class="my-16 border-gray-300">
+
+        <section id="quote" class="my-16 py-10 scroll-mt-20 ">
+            <h3 class="text-3xl sm:text-4xl font-teko mb-6"><i class="fas fa-quote-left text-orange-500 mr-3"></i>A Message for the Day</h3>
+            <blockquote class="quote text-xl sm:text-2xl italic text-gray-700 max-w-3xl mx-auto">
+                "At the stroke of the midnight hour, when the world sleeps, India will awake to life and freedom."
+                <cite class="block not-italic mt-4 text-lg sm:text-xl font-semibold">- Jawaharlal Nehru</cite>
+            </blockquote>
+        </section>
+
+        <hr class="my-16 border-gray-300">
+
+        <section id="timeline" class="my-10 py-12 scroll-mt-20">
+            <h3 class="text-3xl sm:text-4xl font-teko mb-10"><i class="fas fa-history text-green-600 mr-3"></i>A Journey to Freedom</h3>
+            <div class="relative wrap overflow-hidden p-4 md:p-10 h-full">
+                <div class="absolute border-2-2 border-opacity-20 border-gray-700 h-full border left-8 md:left-1/2 md:-translate-x-1/2"></div>
+                
+                <div class="mb-8 flex md:justify-between items-center w-full">
+                    <div class="hidden md:block order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full absolute left-8 -translate-x-1/2 md:relative md:translate-x-0"><h4 class="mx-auto font-semibold text-lg text-white">1</h4></div>
+                    <div class="group relative order-1 bg-gray-100 rounded-lg shadow-xl w-full md:w-5/12 ml-10 md:ml-0 p-4 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                        <img src="./materials/1857.jpg" alt="1857 Rebellion" class="mb-3 rounded-md w-full h-48 sm:h-64 md:h-80 object-cover">
+                        <h4 class="font-bold text-gray-800 text-lg sm:text-xl text-left">1857</h4>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700 text-left">The Indian Rebellion of 1857, a major uprising against the rule of the British East India Company.</p>
+                        <a href="https://en.wikipedia.org/wiki/Indian_Rebellion_of_1857" target="_blank" class="hidden group-hover:inline-block mt-2 text-blue-600 underline text-sm">Click to learn more</a>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex md:justify-between md:flex-row-reverse items-center w-full">
+                    <div class="hidden md:block order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full absolute left-8 -translate-x-1/2 md:relative md:translate-x-0"><h4 class="mx-auto text-white font-semibold text-lg">2</h4></div>
+                    <div class="group relative order-1 bg-gray-100 rounded-lg shadow-xl w-full md:w-5/12 ml-10 md:ml-0 p-4 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                        <img src="./materials/inc2.PNG" alt="INC Formation" class="mb-3 rounded-md w-full h-48 sm:h-64 md:h-80 object-cover">
+                        <h4 class="font-bold text-gray-800 text-lg sm:text-xl text-left">1885</h4>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700 text-left">Formation of the Indian National Congress to seek a greater share in government for educated Indians.</p>
+                        <a href="https://en.wikipedia.org/wiki/Indian_National_Congress" target="_blank" class="hidden group-hover:inline-block mt-2 text-blue-600 underline text-sm">Click to learn more</a>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex md:justify-between items-center w-full">
+                    <div class="hidden md:block order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full absolute left-8 -translate-x-1/2 md:relative md:translate-x-0"><h4 class="mx-auto font-semibold text-lg text-white">3</h4></div>
+                    <div class="group relative order-1 bg-gray-100 rounded-lg shadow-xl w-full md:w-5/12 ml-10 md:ml-0 p-4 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                        <img src="./materials/non.jpg" alt="Non-Cooperation Movement" class="mb-3 rounded-md w-full h-48 sm:h-64 md:h-80 object-cover">
+                        <h4 class="font-bold text-gray-800 text-lg sm:text-xl text-left">1920</h4>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700 text-left">Mahatma Gandhi launches the Non-Cooperation Movement, a nationwide campaign of nonviolent civil disobedience.</p>
+                        <a href="https://en.wikipedia.org/wiki/Non-cooperation_movement" target="_blank" class="hidden group-hover:inline-block mt-2 text-blue-600 underline text-sm">Click to learn more</a>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex md:justify-between md:flex-row-reverse items-center w-full">
+                    <div class="hidden md:block order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full absolute left-8 -translate-x-1/2 md:relative md:translate-x-0"><h4 class="mx-auto text-white font-semibold text-lg">4</h4></div>
+                    <div class="group relative order-1 bg-gray-100 rounded-lg shadow-xl w-full md:w-5/12 ml-10 md:ml-0 p-4 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                        <img src="./materials/quit.jpg" alt="Quit India Movement" class="mb-3 rounded-md w-full h-48 sm:h-64 md:h-80 object-cover">
+                        <h4 class="font-bold text-gray-800 text-lg sm:text-xl text-left">1942</h4>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700 text-left">The Quit India Movement is launched, demanding an end to British rule in India.</p>
+                        <a href="https://en.wikipedia.org/wiki/Quit_India_Movement" target="_blank" class="hidden group-hover:inline-block mt-2 text-blue-600 underline text-sm">Click to learn more</a>
+                    </div>
+                </div>
+                
+                <div class="mb-8 flex md:justify-between items-center w-full">
+                    <div class="hidden md:block order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-gray-800 shadow-xl w-8 h-8 rounded-full absolute left-8 -translate-x-1/2 md:relative md:translate-x-0"><h4 class="mx-auto font-semibold text-lg text-white">5</h4></div>
+                    <div class="group relative order-1 bg-gray-100 rounded-lg shadow-xl w-full md:w-5/12 ml-10 md:ml-0 p-4 hover:scale-105 hover:shadow-2xl transition-all duration-300">
+                        <img src="./materials/15.jpg" alt="Indian Independence" class="mb-3 rounded-md w-full h-48 sm:h-64 md:h-80 object-cover">
+                        <h4 class="font-bold text-gray-800 text-lg sm:text-xl text-left">1947</h4>
+                        <p class="text-sm leading-snug tracking-wide text-gray-700 text-left">India achieves independence. The Indian Independence Act is passed, partitioning British India.</p>
+                        <a href="https://en.wikipedia.org/wiki/Indian_Independence_Act_1947" target="_blank" class="hidden group-hover:inline-block mt-2 text-blue-600 underline text-sm">Click to learn more</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-16 border-gray-300">
+
+        <section id="pledge" class="my-16 py-16 scroll-mt-20">
+            <h3 class="text-3xl sm:text-4xl font-teko mb-6">Take the Pledge</h3>
+            <p class="max-w-2xl mx-auto mb-8 text-gray-600">Join fellow patriots in pledging allegiance to our nation. Add your name to the wall of honor!</p>
+
+            <form id="pledge-form" class="max-w-md mx-auto flex flex-col sm:flex-row gap-2 mb-10">
+                <input type="text" id="name-input" placeholder="Enter your name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <button type="submit" class="bg-orange-500 text-white font-semibold px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors duration-300 whitespace-nowrap">Pledge</button>
+            </form>
+
+            <h3 class="text-2xl sm:text-3xl font-teko mb-4">Wall of Honor</h3>
+            
+            <p class="text-lg sm:text-xl mb-4">
+                <strong>Mohit</strong> and <strong id="pledge-count" class="text-orange-500">8+</strong> others have pledged!
+            </p>
+
+            <div id="pledge-list" class="max-w-2xl mx-auto max-h-72 overflow-y-auto bg-white/50 border border-gray-200 rounded-lg p-4 space-y-2">
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white text-center p-4">
+        <p>Jai Hind! 🇮🇳</p>
+    </footer>
+
+    <audio id="fireworkSound" src="./materials/firw.m4a" preload="auto"></audio>
+    <audio id="nationalAnthem" src="./materials/Jana Gana Mana.mp3" preload="auto"></audio>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // --- Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavLinks = document.querySelectorAll('#nav-links-mobile a');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.toggle('hidden');
+            mobileMenuBtn.innerHTML = isHidden ? `<i class="fas fa-bars"></i>` : `<i class="fas fa-times"></i>`;
+        });
+        
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.innerHTML = `<i class="fas fa-bars"></i>`;
+            });
+        });
+
+        // --- Fireworks ---
+        const fireworksContainer = document.getElementById('fireworks-container');
+        const fireworkSound = document.getElementById('fireworkSound');
+
+        fireworksContainer.addEventListener('click', function(e) {
+            if (e.target.closest('a, button, form, input')) return;
+            fireworkSound.currentTime = 0;
+            fireworkSound.play().catch(err => {});
+            createExplosion(e.pageX, e.pageY);
+        });
+
+        function createExplosion(x, y) {
+            const particleCount = 100;
+            const colors = ['#FF9933', '#FFFFFF', '#138808', '#000080', '#FFC700', '#FF0000'];
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.background = color;
+                const size = Math.random() * 6 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 250 + 50;
+                particle.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+                particle.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 1500);
+            }
+        }
+
+        // --- Pledge Form ---
+        const pledgeForm = document.getElementById('pledge-form');
+        const nameInput = document.getElementById('name-input');
+        const pledgeList = document.getElementById('pledge-list');
+        const pledgeCountSpan = document.getElementById('pledge-count');
+        
+        let pledgeCount = 8;
+        const initialNames = ['Mohit', 'Pushkar', 'Krrish', 'Binay', 'Kansh', 'Kushal', 'Mohak', 'Strawhat'];
+
+        function addPledgeName(name) {
+            const nameElement = document.createElement('div');
+            nameElement.className = 'bg-white p-2 rounded-md shadow text-left';
+            nameElement.innerHTML = `<span class="mr-2">🇮🇳</span><span class="font-semibold">${name}</span>`;
+            pledgeList.insertBefore(nameElement, pledgeList.firstChild);
+        }
+        
+        initialNames.reverse().forEach(name => addPledgeName(name));
+
+        pledgeForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = nameInput.value.trim();
+            if (name) {
+                addPledgeName(name);
+                pledgeCount++;
+                pledgeCountSpan.textContent = `${pledgeCount}+`;
+                nameInput.value = '';
+            }
+        });
+
+        // --- National Anthem Player (UPDATED LOGIC) ---
+        const anthemBtnDesktop = document.getElementById('anthem-btn-desktop');
+        const anthemBtnMobile = document.getElementById('anthem-btn-mobile');
+        const anthemAudio = document.getElementById('nationalAnthem');
+        const anthemPlayer = document.getElementById('anthem-player');
+        const closePlayerBtn = document.getElementById('close-player-btn');
+        const playerPlayPauseBtn = document.getElementById('player-play-pause-btn');
+        const playerStopBtn = document.getElementById('player-stop-btn');
+        const anthemButtons = [anthemBtnDesktop, anthemBtnMobile];
+
+        function updateAllButtons(state) {
+            const playerPlayPauseIcon = playerPlayPauseBtn.querySelector('i');
+            if(state === 'play') {
+                 anthemBtnDesktop.innerHTML = `<i class="fas fa-pause"></i><span class="hidden lg:inline ml-2">Pause National Anthem</span>`;
+                 anthemBtnMobile.innerHTML = `<i class="fas fa-pause mr-2"></i>Pause Anthem`;
+                 playerPlayPauseIcon.className = 'fas fa-pause';
+            } else { // 'pause' or 'stop' state
+                 anthemBtnDesktop.innerHTML = `<i class="fas fa-play"></i><span class="hidden lg:inline ml-2">Play National Anthem</span>`;
+                 anthemBtnMobile.innerHTML = `<i class="fas fa-play mr-2"></i>Play Anthem`;
+                 playerPlayPauseIcon.className = 'fas fa-play';
+            }
+        }
+
+        function playAnthem() {
+            anthemAudio.play();
+            updateAllButtons('play');
+            anthemPlayer.classList.remove('hidden');
+            anthemPlayer.classList.add('flex');
+        }
+
+        function pauseAnthem() {
+            anthemAudio.pause();
+            updateAllButtons('pause');
+            if (window.innerWidth >= 768) { 
+                anthemPlayer.classList.add('hidden');
+                anthemPlayer.classList.remove('flex');
+            }
+        }
+        
+        anthemButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (anthemAudio.paused) playAnthem();
+                else pauseAnthem();
+            });
+        });
+
+        playerPlayPauseBtn.addEventListener('click', () => {
+            if (anthemAudio.paused) playAnthem();
+            else pauseAnthem();
+        });
+
+        playerStopBtn.addEventListener('click', () => {
+            anthemAudio.pause();
+            anthemAudio.currentTime = 0;
+            updateAllButtons('pause');
+        });
+
+        closePlayerBtn.addEventListener('click', () => {
+            anthemAudio.pause();
+            anthemAudio.currentTime = 0;
+            updateAllButtons('pause');
+            anthemPlayer.classList.add('hidden');
+            anthemPlayer.classList.remove('flex');
+        });
+
+        anthemAudio.onended = () => {
+            updateAllButtons('pause');
+            if (window.innerWidth >= 768) {
+                anthemPlayer.classList.add('hidden');
+                anthemPlayer.classList.remove('flex');
+            }
+        };
+
+        // --- Countdown Timer ---
+        const countdownDate = new Date("Aug 18, 2025 23:59:59").getTime();
+        const countdownFunction = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+            
+            if (distance < 0) {
+                clearInterval(countdownFunction);
+                document.getElementById("countdown").innerHTML = "<div class='text-xl'>The Challenge is Over!</div>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+        }, 1000);
+
+        // --- Active Nav Link on Scroll ---
+        const sections = document.querySelectorAll('section');
+        const allNavLinks = document.querySelectorAll('#nav-links-desktop a, #nav-links-mobile a');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            allNavLinks.forEach(link => {
+                link.classList.remove('active-nav-link');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active-nav-link');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+@import "tailwindcss";
+html{
+    scroll-behavior: smooth;
+}
+ @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Teko:wght@700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .font-teko {
+            font-family: 'Teko', sans-serif;
+        }
+
+        .flag {
+            width: 300px;
+            height: 200px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: wave 3s infinite linear;
+            transform-origin: left center;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg) skewX(0deg); }
+            50% { transform: rotate(2deg) skewX(-5deg); }
+        }
+        
+        .animate-spin-slow {
+            animation: spin 20s linear infinite;
+        }
+
+        .quote {
+            animation: fadeIn 4s forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .firework {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 90%;
+            pointer-events: none; 
+        }
+        
+        .active-nav-link {
+            color: #3b82f6;
+            font-weight: 600;
+        }
