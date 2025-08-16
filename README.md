@@ -1,30 +1,36 @@
-# Independence Day Webpage 🇮🇳  
+# Independence Day Webpage 🇮🇳
 
 🌐 **Live Demo:** [independence-dayacm.netlify.app](https://independence-dayacm.netlify.app/)  
 
-This is a **mini Independence Day themed webpage** created as a project for the **Code Tiranga Challenge** organized by ACM Student Chapter.  
+A **mini Independence Day themed webpage** built as a project for the **Code Tiranga Challenge** by ACM Student Chapter.
 
-## Features  
-- 🇮🇳 Animated Tricolor Flag  
-- 📝 Patriotic Quote / Message  
-- 📱 Responsive Design
-- ⌛timeline section
-- 🙋pledge section
-- 🎆 Fireworks & Hover Effects (extra creativity)  
+---
 
-## Tech Stack  
+## ✨ Features
+- 🇮🇳 **Animated Tricolor Flag**  
+- 📝 **Patriotic Quotes & Messages**  
+- 📱 **Responsive Design**  
+- ⌛ **Timeline Section**  
+- 🙋 **Pledge Section**  
+- 🎆 **Fireworks & Hover Effects** (extra creativity)  
+
+---
+
+## 🛠️ Tech Stack
 - HTML  
 - CSS  
 - JavaScript  
 
-## Glimpses for Desktop
-<div style="display: flex; gap: 10px; overflow-x: auto;flex-row">
-  <img src="screenshots/pc-2.png" width="500"/>
-  <img src="screenshots/pc.png" width="500"/>
+---
+
+## 🖥️ Desktop Preview
+<div style="display: flex; gap: 15px; overflow-x: auto;">
+  <img src="screenshots/pc-2.png" width="500" alt="Desktop View 1"/>
+  <img src="screenshots/pc.png" width="500" alt="Desktop View 2"/>
 </div>
 
-## For Mobile Phone
-<div style="display: flex; gap: 10px; overflow-x: auto;">
-  <img src="screenshots/mob.png" width="250"/>
-  <img src="screenshots/mob2.png" width="250"/>
+## 📱 Mobile Preview
+<div style="display: flex; gap: 15px; overflow-x: auto;">
+  <img src="screenshots/mob.png" width="250" alt="Mobile View 1"/>
+  <img src="screenshots/mob2.png" width="250" alt="Mobile View 2"/>
 </div>
