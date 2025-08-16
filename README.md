@@ -19,8 +19,8 @@ This is a **mini Independence Day themed webpage** created as a project for the 
 
 ## Glimpses for Desktop
 <div style="display: flex; gap: 10px; overflow-x: auto;flex-row">
-  <img src="screenshots/pc-2.png" width="600"/>
-  <img src="screenshots/pc.png" width="600"/>
+  <img src="screenshots/pc-2.png" width="500"/>
+  <img src="screenshots/pc.png" width="500"/>
 </div>
 
 ## For Mobile Phone
